@@ -1,4 +1,4 @@
-// Array of song objects. Add at least 5 songs with title, artist, and genre properties.
+// Array of song objects. Add at least 5 songs with title, artist, and genre properties
 
 const songs = [
   { title: "Hooked on a Feeling", artist: "Blue Swede", genre: "Pop" },
@@ -30,12 +30,10 @@ const songs = [
     genre: "Pop",
   },
   { title: "Bouncy", artist: "ATEEZ", genre: "Rock" },
-
   { title: "Crown", artist: "Tomorrow X Together", genre: "Pop" },
   { title: "Given Taken", artist: "Enhypen", genre: "Pop" },
-
   { title: "Love Killa", artist: "Monsta X", genre: "Pop" },
-
+  { title: "" },
   // Feel free to add even more songs
 ];
 
@@ -51,49 +49,44 @@ const guardians = {
 
 // Function to generate playlist based on preferred genre
 function generatePlaylist(guardians, songs) {
-  // Use the map() function to create playlists for each Guardian
-  //iteration
-  const playlist = {};
-  for (const guardian in guardians) {
-    const preferredGenre = guardians[guardian];
-    playlist[guardian] = [];
-
-    //filtering
-
-    const guardianPlaylist = songs
-      .filter((song) => song.genre === preferredGenre)
-      .map((song) => ({ title: song.title, artist: song.artist }));
-
-    //assignment
-    playlist[guardian] = guardianPlaylist;
-  }
-
-  return playlist;
+  // return playlist;
+  return Object.entries(guardians).map(([guardian, preferredGenre]) => {
+    let playlist = songs.filter((song) => song.genre === preferredGenre);
+    return { guardian, playlist };
+  });
 }
-// Your code here
-
-//const playlist = generatePlaylist(guardians, songs);
-//console.log(playlist);
 
 // Call generatePlaylist and display the playlists for each Guardian
+const playlists = generatePlaylist(guardians, songs);
 
-const playlistsDesign = document.getElementById("playlists");
+const playlistDesign = document.getElementById("playlists");
 
-for (const guardian in playlist) {
+playlists.forEach(({ guardian, playlist }) => {
+  // const { guardian, songs} = playlist;
+  const playlistElement = document.createElement("div");
+  playlistElement.classList.add("playlist");
+
   const heading = document.createElement("h2");
   heading.textContent = `${guardian}'s Playlist:`;
+  playlistElement.appendChild(heading);
 
-  // Create an unordered list to display the songs
-  const playlistList = document.createElement("ul");
+  // Display
 
-  // Add each song to the list
-  playlist[guardian].forEach((song) => {
-    const listItem = document.createElement("li");
-    listItem.textContent = song;
-    playlistList.appendChild(listItem);
+  playlist.forEach((song) => {
+    const songElement = document.createElement("div");
+    songElement.classList.add("song");
+
+    const songTitle = document.createElement("span");
+    songTitle.textContent = song.title;
+    songTitle.classList.add("song-title");
+    songElement.appendChild(songTitle);
+
+    const songArtist = document.createElement("span");
+    songArtist.textContent = ` - ${song.artist}`;
+    songElement.appendChild(songArtist);
+
+    playlistElement.appendChild(songElement);
   });
 
-  // Append the heading and the playlist list to the container
-  playlistsContainer.appendChild(heading);
-  playlistsContainer.appendChild(playlistList);
-}
+  playlistDesign.appendChild(playlistElement);
+});
