@@ -82,7 +82,7 @@ playlists.forEach(({ guardian, playlist }) => {
     songElement.appendChild(songTitle);
 
     const songArtist = document.createElement("span");
-    songArtist.textContent = ` - ${song.artist}`;
+    songArtist.textContent = `  by  ${song.artist}`;
     songElement.appendChild(songArtist);
 
     playlistElement.appendChild(songElement);
